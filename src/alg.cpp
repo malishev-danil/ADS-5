@@ -9,9 +9,9 @@
 #include "alg.h"
 
 std::string infx2pstfx(const std::string& inf) {
-std::string postfix;
 TStack<char, 100> opStack;
-
+std::string postfix;
+  
 for (char c : inf) {
 if (isspace(c))
 continue;
@@ -70,8 +70,8 @@ return postfix;
 
 int eval(const std::string& post) {
 TStack<int, 100> numStack;
-std::stringstream ss(post);
 std::string token;
+std::istringstream stream(post);
 
 while (ss >> token) {
 if (isdigit(token[0])) {
