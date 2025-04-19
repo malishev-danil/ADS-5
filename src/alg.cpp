@@ -1,46 +1,11 @@
 // Copyright 2025 NNTU-CS
+#include <stack>
 #include <string>
 #include <map>
-#include "tstack.h"
 #include <sstream>
-#include <cctype> 
-
-template <typename T, int MAX_SIZE>
-class TStack {
-private:
-T data[MAX_SIZE];
-int top;
-
-public:
-TStack() : top(-1) {}
-bool isEmpty() const {
-return top == -1;
-}
-bool isFull() const {
-return top == MAX_SIZE - 1;
-}
-
-void push(const T& value) {
-if (isFull()) {
-throw std::string("Full");
-}
-data[++top] = value;
-}
-
-T pop() {
-if (isEmpty()) {
-throw std::string("Empty");
-}
-return data[top--];
-}
-
-T peek() const {
-if (isEmpty()) {
-throw std::string("Stack is empty");
-}
-return data[top];
-}
-};
+#include <cctype>
+#include "tstack.h"
+#include "alg.h"
 
 std::string infx2pstfx(const std::string& inf) {
 std::string postfix = "";
@@ -105,9 +70,8 @@ postfix.pop_back();
 }
 return postfix;
 }
-}
 
-int eval(const std::string& pref) {
+int eval(const std::string& post) {
 TStack<int, 100> numStack;
 std::stringstream ss(post);
 std::string token;
