@@ -17,29 +17,31 @@ default: throw std::invalid_argument("Недопустимая операция"
 }
 
 std::string infx2pstfx(const std::string& infix) {
-TStack<char, 100> operatorsStack; 
+TStack<char, 100> operatorsStack;
 std::stringstream output;
 std::string numberBuffer;
 
 for (char currentChar : infix) {
 if (isdigit(currentChar)) {
-numberBuffer += currentChar; 
+numberBuffer += currentChar;
 } else {
 if (!numberBuffer.empty()) {
-output << numberBuffer << " "; 
+output << numberBuffer << " ";
 numberBuffer.clear();
 }
 if (currentChar == '(') {
 operatorsStack.push(currentChar);
 } else if (currentChar == ')') {
 while (!operatorsStack.isEmpty() && operatorsStack.peek() != '(') {
-output << operatorsStack.pop() << " "; 
+output << operatorsStack.pop() << " ";
 }
 if (!operatorsStack.isEmpty()) {
-operatorsStack.pop(); 
+operatorsStack.pop();
 }
-} else if (currentChar == '+' || currentChar == '-' || currentChar == '*' || currentChar == '/') {
-while (!operatorsStack.isEmpty() && getOperationPriority(operatorsStack.peek()) >= getOperationPriority(currentChar)) {
+} else if (currentChar == '+' || currentChar == '-' || 
+currentChar == '*' || currentChar == '/') {
+while (!operatorsStack.isEmpty() && 
+getOperationPriority(operatorsStack.peek()) >= getOperationPriority(currentChar)) {
 output << operatorsStack.pop() << " ";
 }
 operatorsStack.push(currentChar);
@@ -72,9 +74,6 @@ std::string token;
 while (ss >> token) {
 if (isdigit(token[0])) {
 evaluationStack.push(std::stoi(token));
-} else {
-if (evaluationStack.size() < 2) {
-throw std::invalid_argument("Недостаточно операндов для операции");
 }
 int operand2 = evaluationStack.pop();
 int operand1 = evaluationStack.pop();
@@ -82,11 +81,11 @@ switch (token[0]) {
 case '+': evaluationStack.push(operand1 + operand2); break;
 case '-': evaluationStack.push(operand1 - operand2); break;
 case '*': evaluationStack.push(operand1 * operand2); break;
-case '/': 
+case '/':
 if (operand2 == 0) {
 throw std::invalid_argument("Ошибка: деление на ноль");
 }
-evaluationStack.push(operand1 / operand2); 
+evaluationStack.push(operand1 / operand2);
 break;
 }
 }
