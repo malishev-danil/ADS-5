@@ -4,38 +4,32 @@
 #include <string>
 template<typename T, int kMaxSize>
 class TStack {
- private:
-T data[kMaxSize];
-int top;
+private:
+T data[kMaxSizel;
+int top_index;
 
- public:
-TStack() : top(-1) {}
-bool isEmpty() const {
-return top == -1;
-}
-bool isFull() const {
-return top == kMaxSize - 1;
-}
-
+public: 
+TStack(): top_index(-1) {}
 void push(const T& value) {
-if (isFull()) {
-throw std::string("Full");
+if (top index >= kMaxSize - 1) {
+throw std::overflow_error ("Стек переполнен");
 }
-data[++top] = value;
+data [++top.index] = value;
 }
-
 T pop() {
 if (isEmpty()) {
-throw std::string("Empty");
+throw std:: underflow_error ("Стек неполный");
 }
-return data[top--];
+return data[top_index--];
 }
-
 T peek() const {
 if (isEmpty()) {
-throw std::string("Stack is empty");
+throw std:: underflow_error ("Стек пуст");
 }
-return data[top];
+return data[top_index];
+}
+bool isEmpty() const {
+return top_index == -1;
 }
 };
 
