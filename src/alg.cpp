@@ -12,24 +12,29 @@ std::string postfix;
 TStack<char, 100> opStack;
 
 for (char c : inf) {
-if (isspace(c)) continue;
+if (isspace(c))
+continue;
 
 if (isdigit(c)) {
 postfix += c;
 postfix += ' ';
-} else if (c == '(') {
+} 
+else if (c == '(') {
 opStack.push(c);
-} else if (c == ')') {
+} 
+else if (c == ')') {
 while (!opStack.isEmpty() && opStack.peek() != '(') {
 postfix += opStack.pop();
 postfix += ' ';
 }
 if (!opStack.isEmpty() && opStack.peek() == '(') {
 opStack.pop();
-} else {
-throw std::string("Error with parentheses");
+} 
+else {
+throw std::runtime_error("Error with parentheses");
 }
-} else {
+} 
+else {
 int precedence = 0;
 if (c == '+' || c == '-') precedence = 1;
 else if (c == '*' || c == '/') precedence = 2;
@@ -44,7 +49,8 @@ else break;
 if (precedence <= topPrecedence) {
 postfix += opStack.pop();
 postfix += ' ';
-} else {
+} 
+else {
 break;
 }
 }
@@ -54,7 +60,7 @@ opStack.push(c);
 
 while (!opStack.isEmpty()) {
 if (opStack.peek() == '(') {
-throw std::string("Error");
+throw std::runtime_error("Error");
 }
 postfix += opStack.pop();
 postfix += ' ';
@@ -74,38 +80,46 @@ std::string token;
 while (ss >> token) {
 if (isdigit(token[0])) {
 numStack.push(std::stoi(token));
-} else {
+} 
+else {
 if (numStack.isEmpty()) {
-throw std::string("Error in the postfix form");
+throw std::runtime_error("Error in the postfix form");
 }
 int operand2 = numStack.pop();
 if (numStack.isEmpty()) {
-throw std::string("Error in the postfix form");
+throw std::runtime_error("Error in the postfix form");
 }
 int operand1 = numStack.pop();
 
 int result;
-if (token == "+") result = operand1 + operand2;
-else if (token == "-") result = operand1 - operand2;
-else if (token == "*") result = operand1 * operand2;
+if (token == "+") {
+result = operand1 + operand2;
+} 
+else if (token == "-") {
+result = operand1 - operand2;
+} 
+else if (token == "*") {
+result = operand1 * operand2;
+} 
 else if (token == "/") {
 if (operand2 == 0) {
-throw std::string("Division by zero");
+throw std::runtime_error("Division by zero");
 }
 result = operand1 / operand2;
-} else {
-throw std::string("Invalid operator");
+} 
+else {
+throw std::runtime_error("Invalid operator");
 }
 numStack.push(result);
 }
 }
 
 if (numStack.isEmpty()) {
-throw std::string("Empty");
+throw std::runtime_error("Empty");
 }
 int finalResult = numStack.pop();
 if (!numStack.isEmpty()) {
-throw std::string("Error in the postfix form");
+throw std::runtime_error("Error in the postfix form");
 }
 return finalResult;
 }
