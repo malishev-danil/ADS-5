@@ -4,38 +4,38 @@
 #include <string>
 template<typename T, int size>
 class TStack {
-private:
-T data[MAX_SIZE];
+private: 
+T data[size];
 int top;
 
-public:
+public: 
 TStack() : top(-1) {}
 bool isEmpty() const {
 return top == -1;
 }
 bool isFull() const {
-return top == MAX_SIZE - 1;
+return top == size - 1;
 }
 
 void push(const T& value) {
 if (isFull()) {
 throw std::string("Full");
 }
-data[++top] = value;
+std::data[++top] = value;
 }
 
 T pop() {
 if (isEmpty()) {
 throw std::string("Empty");
 }
-return data[top--];
+return std::data[top--];
 }
 
 T peek() const {
 if (isEmpty()) {
 throw std::string("Stack is empty");
 }
-return data[top];
+return stad::data[top];
 }
 };
 
