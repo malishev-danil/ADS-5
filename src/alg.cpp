@@ -8,109 +8,91 @@
 #include "tstack.h"
 #include "alg.h"
 
-std::string infx2pstfx(const std::string& inf) {
-TStack<char, 100> opStack;
-std::string postfix;
-  
-for (char c : inf) {
-if (isspace(c))
-continue;
-
-if (isdigit(c)) {
-postfix += c;
-postfix += ' ';
-} else if (c == '(') {
-opStack.push(c);
-} else if (c == ')') {
-while (!opStack.isEmpty() && opStack.peek() != '(') {
-postfix += opStack.pop();
-postfix += ' ';
+int getOperationPriority(char op) {
+switch (op) {
+case '+': case '-': return 1;
+case '*': case '/': return 2;
+default: throw std::invalid_argument("Недопустимая операция");
 }
-if (!opStack.isEmpty() && opStack.peek() == '(') {
-opStack.pop();
+}
+
+std::string infx2pstfx(const std::string& infix) {
+TStack<char, 100> operatorsStack; 
+std::stringstream output;
+std::string numberBuffer;
+
+for (char currentChar : infix) {
+if (isdigit(currentChar)) {
+numberBuffer += currentChar; 
 } else {
-throw std::runtime_error("Error with parentheses");
+if (!numberBuffer.empty()) {
+output << numberBuffer << " "; 
+numberBuffer.clear();
 }
-} else {
-int precedence = 0;
-if (c == '+' || c == '-') precedence = 1;
-else if (c == '*' || c == '/') precedence = 2;
-
-while (!opStack.isEmpty()) {
-char topOp = opStack.peek();
-int topPrecedence = 0;
-if (topOp == '+' || topOp == '-') topPrecedence = 1;
-else if (topOp == '*' || topOp == '/') topPrecedence = 2;
-else break;
-
-if (precedence <= topPrecedence) {
-postfix += opStack.pop();
-postfix += ' ';
-} else {
-break;
+if (currentChar == '(') {
+operatorsStack.push(currentChar);
+} else if (currentChar == ')') {
+while (!operatorsStack.isEmpty() && operatorsStack.peek() != '(') {
+output << operatorsStack.pop() << " "; 
 }
+if (!operatorsStack.isEmpty()) {
+operatorsStack.pop(); 
 }
-opStack.push(c);
+} else if (currentChar == '+' || currentChar == '-' || currentChar == '*' || currentChar == '/') {
+while (!operatorsStack.isEmpty() && getOperationPriority(operatorsStack.peek()) >= getOperationPriority(currentChar)) {
+output << operatorsStack.pop() << " ";
+}
+operatorsStack.push(currentChar);
+} else if (!isspace(currentChar)) {
+throw std::invalid_argument("Недопустимый символ в выражении");
 }
 }
-
-while (!opStack.isEmpty()) {
-if (opStack.peek() == '(') {
-throw std::runtime_error("Error");
-}
-postfix += opStack.pop();
-postfix += ' ';
 }
 
-if (!postfix.empty() && postfix.back() == ' ') {
-postfix.pop_back();
-}
-return postfix;
+if (!numberBuffer.empty()) {
+output << numberBuffer << " ";
 }
 
-int eval(const std::string& post) {
-TStack<int, 100> numStack;
+while (!operatorsStack.isEmpty()) {
+output << operatorsStack.pop() << " ";
+}
+
+std::string postfixResult = output.str();
+if (!postfixResult.empty() && postfixResult.back() == ' ') {
+postfixResult.pop_back();
+}
+return postfixResult;
+}
+
+int eval(const std::string& postfix) {
+TStack<int, 100> evaluationStack;
+std::stringstream ss(postfix);
 std::string token;
-std::istringstream stream(post);
 
 while (ss >> token) {
 if (isdigit(token[0])) {
-numStack.push(std::stoi(token));
+evaluationStack.push(std::stoi(token));
 } else {
-if (numStack.isEmpty()) {
-throw std::runtime_error("Error in the postfix form");
+if (evaluationStack.size() < 2) {
+throw std::invalid_argument("Недостаточно операндов для операции");
 }
-int operand2 = numStack.pop();
-if (numStack.isEmpty()) {
-throw std::runtime_error("Error in the postfix form");
-}
-int operand1 = numStack.pop();
-
-int result;
-if (token == "+") {
-result = operand1 + operand2;
-} else if (token == "-") {
-result = operand1 - operand2;
-} else if (token == "*") {
-result = operand1 * operand2;
-} else if (token == "/") {
+int operand2 = evaluationStack.pop();
+int operand1 = evaluationStack.pop();
+switch (token[0]) {
+case '+': evaluationStack.push(operand1 + operand2); break;
+case '-': evaluationStack.push(operand1 - operand2); break;
+case '*': evaluationStack.push(operand1 * operand2); break;
+case '/': 
 if (operand2 == 0) {
-throw std::runtime_error("Division by zero");
+throw std::invalid_argument("Ошибка: деление на ноль");
 }
-result = operand1 / operand2;
-} else {
-throw std::runtime_error("Invalid operator");
-}
-numStack.push(result);
+evaluationStack.push(operand1 / operand2); 
+break;
 }
 }
-
-if (numStack.isEmpty()) {
-throw std::runtime_error("Empty");
 }
-int finalResult = numStack.pop();
-if (!numStack.isEmpty()) {
-throw std::runtime_error("Error in the postfix form");
+if (evaluationStack.isEmpty()) {
+throw std::runtime_error("Ошибка: нет результата");
 }
-return finalResult;
+return evaluationStack.pop();
 }
