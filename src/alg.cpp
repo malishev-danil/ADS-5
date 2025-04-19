@@ -29,7 +29,7 @@ opStack.pop();
 } else {
 throw std::string("Error with parentheses");
 }
-} else { 
+} else {
 int precedence = 0;
 if (c == '+' || c == '-') precedence = 1;
 else if (c == '*' || c == '/') precedence = 2;
@@ -74,8 +74,7 @@ std::string token;
 while (ss >> token) {
 if (isdigit(token[0])) {
 numStack.push(std::stoi(token));
-}
-else {
+} else {
 if (numStack.isEmpty()) {
 throw std::string("Error in the postfix form");
 }
@@ -108,6 +107,5 @@ int finalResult = numStack.pop();
 if (!numStack.isEmpty()) {
 throw std::string("Error in the postfix form");
 }
-
 return finalResult;
 }
