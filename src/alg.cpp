@@ -17,23 +17,19 @@ if (isspace(c)) continue;
 if (isdigit(c)) {
 postfix += c;
 postfix += ' ';
-}
-else if (c == '(') {
+} else if (c == '(') {
 opStack.push(c);
-}
-else if (c == ')') {
+} else if (c == ')') {
 while (!opStack.isEmpty() && opStack.peek() != '(') {
 postfix += opStack.pop();
 postfix += ' ';
 }
 if (!opStack.isEmpty() && opStack.peek() == '(') {
 opStack.pop();
-}
-else {
+} else {
 throw std::string("Error with parentheses");
 }
-}
-else { // Оператор
+} else { 
 int precedence = 0;
 if (c == '+' || c == '-') precedence = 1;
 else if (c == '*' || c == '/') precedence = 2;
@@ -48,8 +44,7 @@ else break;
 if (precedence <= topPrecedence) {
 postfix += opStack.pop();
 postfix += ' ';
-}
-else {
+} else {
 break;
 }
 }
@@ -99,8 +94,7 @@ if (operand2 == 0) {
 throw std::string("Division by zero");
 }
 result = operand1 / operand2;
-}
-else {
+} else {
 throw std::string("Invalid operator");
 }
 numStack.push(result);
