@@ -8,7 +8,7 @@
 #include "alg.h"
 
 std::string infx2pstfx(const std::string& inf) {
-std::string postfix = "";
+std::string postfix;
 TStack<char, 100> opStack;
 
 for (char c : inf) {
