@@ -4,6 +4,7 @@
 #include <map>
 #include <sstream>
 #include <cctype>
+#include <stdexcept>
 #include "tstack.h"
 #include "alg.h"
 
@@ -18,23 +19,19 @@ continue;
 if (isdigit(c)) {
 postfix += c;
 postfix += ' ';
-} 
-else if (c == '(') {
+} else if (c == '(') {
 opStack.push(c);
-} 
-else if (c == ')') {
+} else if (c == ')') {
 while (!opStack.isEmpty() && opStack.peek() != '(') {
 postfix += opStack.pop();
 postfix += ' ';
 }
 if (!opStack.isEmpty() && opStack.peek() == '(') {
 opStack.pop();
-} 
-else {
+} else {
 throw std::runtime_error("Error with parentheses");
 }
-} 
-else {
+} else {
 int precedence = 0;
 if (c == '+' || c == '-') precedence = 1;
 else if (c == '*' || c == '/') precedence = 2;
@@ -49,8 +46,7 @@ else break;
 if (precedence <= topPrecedence) {
 postfix += opStack.pop();
 postfix += ' ';
-} 
-else {
+} else {
 break;
 }
 }
@@ -80,8 +76,7 @@ std::string token;
 while (ss >> token) {
 if (isdigit(token[0])) {
 numStack.push(std::stoi(token));
-} 
-else {
+} else {
 if (numStack.isEmpty()) {
 throw std::runtime_error("Error in the postfix form");
 }
@@ -94,20 +89,16 @@ int operand1 = numStack.pop();
 int result;
 if (token == "+") {
 result = operand1 + operand2;
-} 
-else if (token == "-") {
+} else if (token == "-") {
 result = operand1 - operand2;
-} 
-else if (token == "*") {
+} else if (token == "*") {
 result = operand1 * operand2;
-} 
-else if (token == "/") {
+} else if (token == "/") {
 if (operand2 == 0) {
 throw std::runtime_error("Division by zero");
 }
 result = operand1 / operand2;
-} 
-else {
+} else {
 throw std::runtime_error("Invalid operator");
 }
 numStack.push(result);
