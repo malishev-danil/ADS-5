@@ -2,41 +2,41 @@
 #ifndef INCLUDE_TSTACK_H_
 #define INCLUDE_TSTACK_H_
 #include <string>
-template<typename T, int size>
+template<typename T, int ksize>
 class TStack {
-private: 
-T data[size];
-int top;
+ private:
+ T data[ksize];
+ int top;
 
-public: 
-TStack() : top(-1) {}
-bool isEmpty() const {
-return top == -1;
-}
-bool isFull() const {
-return top == size - 1;
-}
+ public:
+ TStack() : top(-1) {}
+ bool isEmpty() const {
+ return top == -1;
+ }
+ bool isFull() const {
+ return top == ksize - 1;
+ }
 
-void push(const T& value) {
-if (isFull()) {
-throw std::string("Full");
-}
-std::data[++top] = value;
-}
+ void push(const T& value) {
+ if (isFull()) {
+ throw std::string("Full");
+ }
+ data[++top] = value;
+ }
 
-T pop() {
-if (isEmpty()) {
-throw std::string("Empty");
-}
-return std::data[top--];
-}
+ T pop() {
+ if (isEmpty()) {
+ throw std::string("Empty");
+ }
+ return data[top--];
+ }
 
-T peek() const {
-if (isEmpty()) {
-throw std::string("Stack is empty");
-}
-return stad::data[top];
-}
-};
+ T peek() const {
+ if (isEmpty()) {
+ throw std::string("Stack is empty");
+ }
+ return data[top];
+ }
+ };
 
 #endif  // INCLUDE_TSTACK_H_
