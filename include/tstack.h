@@ -41,9 +41,4 @@ class TStack {
         return data[topInd];
     }
 };
-
-#endif  // INCLUDE_TSTACK_H_
-
-return data[topInd];
-
 #endif  // INCLUDE_TSTACK_H_
