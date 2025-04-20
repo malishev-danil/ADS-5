@@ -10,9 +10,14 @@
 
 int getOperationPriority(char op) {
 switch (op) {
-case '+': case '-': return 1;
-case '*': case '/': return 2;
-default: throw std::invalid_argument("Недопустимая операция");
+case '+':
+case '-':
+return 1;
+case '*':
+case '/':
+return 2;
+default:
+throw std::invalid_argument("Недопустимая операция");
 }
 }
 
@@ -38,10 +43,11 @@ output << operatorsStack.pop() << " ";
 if (!operatorsStack.isEmpty()) {
 operatorsStack.pop();
 }
-} else if (currentChar == '+' || currentChar == '-' || 
+} else if (currentChar == '+' || currentChar == '-' ||
 currentChar == '*' || currentChar == '/') {
-while (!operatorsStack.isEmpty() && 
-getOperationPriority(operatorsStack.peek()) >= getOperationPriority(currentChar)) {
+while (!operatorsStack.isEmpty() &&
+getOperationPriority(operatorsStack.peek()) >=
+getOperationPriority(currentChar)) {
 output << operatorsStack.pop() << " ";
 }
 operatorsStack.push(currentChar);
@@ -74,24 +80,40 @@ std::string token;
 while (ss >> token) {
 if (isdigit(token[0])) {
 evaluationStack.push(std::stoi(token));
+} else {
+if (evaluationStack.isEmpty()) {
+throw std::runtime_error("Ошибка: недостаточно операндов");
 }
 int operand2 = evaluationStack.pop();
+if (evaluationStack.isEmpty()) {
+throw std::runtime_error("Ошибка: недостаточно операндов");
+}
 int operand1 = evaluationStack.pop();
+
 switch (token[0]) {
-case '+': evaluationStack.push(operand1 + operand2); break;
-case '-': evaluationStack.push(operand1 - operand2); break;
-case '*': evaluationStack.push(operand1 * operand2); break;
+case '+':
+evaluationStack.push(operand1 + operand2);
+break;
+case '-':
+evaluationStack.push(operand1 - operand2);
+break;
+case '*':
+evaluationStack.push(operand1 * operand2);
+break;
 case '/':
 if (operand2 == 0) {
 throw std::invalid_argument("Ошибка: деление на ноль");
 }
 evaluationStack.push(operand1 / operand2);
 break;
+default:
+throw std::invalid_argument("Недопустимая операция");
 }
 }
 }
-if (evaluationStack.isEmpty()) {
-throw std::runtime_error("Ошибка: нет результата");
+
+if (evaluationStack.size() != 1) {
+throw std::runtime_error("Ошибка: некорректное выражение");
 }
 return evaluationStack.pop();
 }
