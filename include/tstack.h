@@ -1,42 +1,49 @@
 // Copyright 2021 NNTU-CS
 #ifndef INCLUDE_TSTACK_H_
 #define INCLUDE_TSTACK_H_
-#include <string>
-#include <stdexcept> // Для std::overflow_error и std::underflow_error
-
-template<typename T, int kMaxSize>
+#include <stdexcept>
+template<typename T, int K>
 class TStack {
  private:
-T data[kMaxSize];
-int top_index;
+    T data[K];
+    int topInd;
 
  public:
-TStack() : top_index(-1) {}
-
-void push(const T& value) {
-if (top_index >= kMaxSize - 1) {  //Удалены лишние пробелы
-throw std::overflow_error("Стек переполнен");
-}
-data[++top_index] = value; //Исправлено: убраны лишние пробелы и исправлено обращение
-}
-
-T pop() {
-if (isEmpty()) { //Удалены лишние пробелы
-throw std::underflow_error("Стек неполный"); // Убраны лишние пробелы
-}
-return data[top_index--]; //Удалены лишние пробелы
-}
-
-T peek() const {
-if (isEmpty()) { //Удалены лишние пробелы
-throw std::underflow_error("Стек пуст"); //Убраны лишние пробелы
-}
-return data[top_index]; //Удалены лишние пробелы
-}
-
-bool isEmpty() const {
-return top_index == -1;
-}
+    TStack() : topInd(-1) {}
+    bool isEmpty() const {
+        return topInd < 0;
+    }
+    bool isFull() const {
+        return topInd >= K - 1;
+    }
+    void push(const T& item) {
+        if (isFull()) {
+            throw std::runtime_error("Full");
+        }
+        data[++topInd] = item;
+    }
+    void pop() {
+        if (isEmpty()) {
+            throw std::runtime_error("Empty");
+        }
+        --topInd;
+    }
+    T& top() {
+        if (isEmpty()) {
+            throw std::runtime_error("Empty");
+    }
+        return data[topInd];
+    }
+    const T& top() const {
+        if (isEmpty()) {
+            throw std::runtime_error("Empty");
+        }
+        return data[topInd];
+    }
 };
+
+#endif  // INCLUDE_TSTACK_H_
+
+return data[topInd];
 
 #endif  // INCLUDE_TSTACK_H_
