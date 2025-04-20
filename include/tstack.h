@@ -2,32 +2,38 @@
 #ifndef INCLUDE_TSTACK_H_
 #define INCLUDE_TSTACK_H_
 #include <string>
+#include <stdexcept> // Для std::overflow_error и std::underflow_error
+
 template<typename T, int kMaxSize>
 class TStack {
-private:
-T data[kMaxSizel;
+ private:
+T data[kMaxSize];
 int top_index;
 
-public: 
-TStack(): top_index(-1) {}
+ public:
+TStack() : top_index(-1) {}
+
 void push(const T& value) {
-if (top index >= kMaxSize - 1) {
-throw std::overflow_error ("Стек переполнен");
+if (top_index >= kMaxSize - 1) {  //Удалены лишние пробелы
+throw std::overflow_error("Стек переполнен");
 }
-data [++top.index] = value;
+data[++top_index] = value; //Исправлено: убраны лишние пробелы и исправлено обращение
 }
+
 T pop() {
-if (isEmpty()) {
-throw std:: underflow_error ("Стек неполный");
+if (isEmpty()) { //Удалены лишние пробелы
+throw std::underflow_error("Стек неполный"); // Убраны лишние пробелы
 }
-return data[top_index--];
+return data[top_index--]; //Удалены лишние пробелы
 }
+
 T peek() const {
-if (isEmpty()) {
-throw std:: underflow_error ("Стек пуст");
+if (isEmpty()) { //Удалены лишние пробелы
+throw std::underflow_error("Стек пуст"); //Убраны лишние пробелы
 }
-return data[top_index];
+return data[top_index]; //Удалены лишние пробелы
 }
+
 bool isEmpty() const {
 return top_index == -1;
 }
